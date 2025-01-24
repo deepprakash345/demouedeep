@@ -800,7 +800,7 @@ const getFileSizeInBytes = ( str ) => {
     }
     return retVal;
 };
-const sizeToBytes = (size, symbol) => {
+const sizeToBytes = ( size, symbol ) => {
     const sizes = { 'KB': 1, 'MB': 2, 'GB': 3, 'TB': 4 };
     const i = Math.pow(1024, sizes[symbol]);
     return Math.round(size * i);
@@ -2668,12 +2668,12 @@ const convertQueryString = (endpoint, payload) => {
         updatedPayload = JSON.parse(payload);
     }
     catch (err) {
-        console.log('Query params invalid');
+        console.log ( 'Query params invalid' );
     }
     const params = [];
-    Object.keys(updatedPayload).forEach((key) => {
-        if (Array.isArray(updatedPayload[key])) {
-            params.push(`${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(updatedPayload[key]))}`);
+    Object.keys ( updatedPayload ).forEach ( ( key ) => {
+        if ( Array.isArray ( updatedPayload[ key ] ) ) {
+            params.push ( `${ encodeURIComponent ( key ) }=${ encodeURIComponent ( JSON.stringify ( updatedPayload[ key ] ) ) }` );
         } else {
             params.push ( `${ encodeURIComponent ( key ) }=${ encodeURIComponent ( updatedPayload[ key ] ) }` );
         }
@@ -2700,9 +2700,9 @@ const request = async ( context, uri, httpVerb, payload, success, error, headers
         method: httpVerb
     };
     let inputPayload;
-    if (payload && payload instanceof FileObject && payload.data instanceof File) {
-        const formData = new FormData();
-        formData.append(payload.name, payload.data);
+    if ( payload && payload instanceof FileObject && payload.data instanceof File ) {
+        const formData = new FormData ();
+        formData.append ( payload.name, payload.data );
         inputPayload = formData;
     }
     else if (payload instanceof FormData) {
@@ -2790,9 +2790,14 @@ const submit = async (context, success, error, submitAs = 'multipart/form-data',
         };
         const regex = /(.*?)--(.*?)--(.*?)\.(hlx|aem)\.(.*)/;
         const match = window?.location?.host?.match ( regex );
+        formData.submitMetadata = formData.submitMetadata || {};
         if ( match ) {
             const [ , branch, site, org, , tier ] = match;
             headers[ 'x-adobe-routing' ] = `tier=${ tier },bucket=${ branch }--${ site }--${ org }`;
+            formData.submitMetadata.formType = 'xWalk';
+        } else {
+            headers[ 'x-adobe-routing' ] = window.location.host.substring ( 0, window.location.host.lastIndexOf ( '.' ) );
+            formData.submitMetadata.formType = 'cc';
         }
         await request ( context, endpoint, 'POST', formData, success, error, headers );
     }
@@ -3300,9 +3305,8 @@ class Form extends Container {
         if ( mode === 'create' ) {
             this.queueEvent ( new Initialize () );
             if ( this.changeEventBehaviour === 'deps' ) {
-                this.queueEvent(new Change({ changes: [] }));
-            }
-            else {
+                this.queueEvent ( new Change ( { changes: [] } ) );
+            } else {
                 this.queueEvent ( new ExecuteRule () );
             }
         }
@@ -3336,7 +3340,6 @@ class Form extends Container {
             this._jsonModel.properties[ 'fd:changeEventBehaviour' ] = 'self';
         }
     }
-
     _logger;
     get activeField() {
         return this._findActiveField(this);
@@ -3354,11 +3357,13 @@ class Form extends Container {
         return this.properties['fd:changeEventBehaviour'] === 'deps' ? 'deps' : 'self';
     }
     dataRefRegex = /("[^"]+?"|[^.]+?)(?:\.|$)/g;
-    get metaData() {
+
+    get metaData () {
         const metaData = this._jsonModel.metadata || {};
-        return new FormMetaData(metaData);
+        return new FormMetaData ( metaData );
     }
-    get action() {
+
+    get action () {
         return this._jsonModel.action;
     }
 
@@ -3388,12 +3393,11 @@ class Form extends Container {
             try {
                 return new Version ( this._jsonModel.adaptiveform );
             } catch ( e ) {
-                console.log(e);
-                console.log('Falling back to default version' + currentVersion.toString());
+                console.log ( e );
+                console.log ( 'Falling back to default version' + currentVersion.toString () );
                 return currentVersion;
             }
-        }
-        else {
+        } else {
             return currentVersion;
         }
     }
@@ -3605,13 +3609,8 @@ class Form extends Container {
                 'submitMetadata': this.exportSubmitMetaData ()
             };
             let contentType = payload?.save_as || payload?.submit_as;
-            context.form.properties.actionType = 'fd/af/components/guidesubmittype/spreadsheet';
-            const submitType = context.form?.properties?.actionType;
-            if ( MT_SUPPORTED_SUBMIT_TYPES.includes ( submitType ) ) {
+            if ( MT_SUPPORTED_SUBMIT_TYPES.includes ( context.form?.properties?.actionType ) ) {
                 contentType = 'application/json';
-                if ( metadata.submitMetadata ) {
-                    metadata.submitMetadata.type = 'xWalk';
-                }
             }
             submit ( context, successEventName, failureEventName, contentType, payload?.data, formAction, metadata );
         }
@@ -4932,7 +4931,7 @@ class FormFieldFactoryImpl {
             else if (isCaptcha(child)) {
                 retVal = new Captcha(child, options);
             }
-            else if (isButton(child)) {
+            else if ( isButton ( child ) ) {
                 retVal = new Button ( child, options );
             } else {
                 retVal = new Field ( child, options );
