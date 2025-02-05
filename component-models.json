@@ -334,6 +334,7 @@
         "name": "spreadsheetUrl",
         "label": "Spreadsheet Url",
         "valueType": "string",
+        "required": true,
         "condition": {
           "==": [
             {
