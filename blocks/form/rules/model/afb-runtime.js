@@ -2732,7 +2732,7 @@ const submit = async (context, success, error, submitAs = 'multipart/form-data',
     if (typeof data != 'object' || data == null) {
         data = context.form.exportData(attachments);
     }
-    if (context.form?.properties?.actionType != null && context.form?.properties?.actionType.contains(MT_SUPPORTED_SUBMIT_TYPES_PREFIX)) {
+    if (context.form?.properties?.actionType != null && context.form?.properties?.actionType.includes(MT_SUPPORTED_SUBMIT_TYPES_PREFIX)) {
         endpoint = SUBMISSION_SERVICE_DOMAIN + endpoint;
         if (!headers.hasOwnProperty('x-adobe-routing')) {
             headers['x-adobe-routing'] = 'tier=live,bucket=' + window.location.host;
