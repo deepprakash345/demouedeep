@@ -1,15 +1,46 @@
-import { propertyChange, ExecuteRule, Initialize, RemoveItem, SubmitSuccess, CustomEvent, SubmitError, SubmitFailure, Submit, Save, Valid, Invalid, RemoveInstance, AddInstance, Reset, AddItem, Click, Change, FormLoad, FieldChanged, ValidationComplete } from './afb-events.js';
-import Formula from '@adobe/json-formula';
-import { parseDefaultDate, datetimeToNumber, format, parseDateSkeleton, numberToDatetime, formatDate, parseDate } from '@aemforms/af-formatters';
+import {
+    AddInstance,
+    AddItem,
+    Change,
+    Click,
+    CustomEvent,
+    ExecuteRule,
+    FieldChanged,
+    FormLoad,
+    Initialize,
+    Invalid,
+    propertyChange,
+    RemoveInstance,
+    RemoveItem,
+    Reset,
+    Save,
+    Submit,
+    SubmitError,
+    SubmitFailure,
+    SubmitSuccess,
+    Valid,
+    ValidationComplete
+} from './afb-events.js';
+import Formula from '../formula/index.js';
+import {
+    datetimeToNumber,
+    format,
+    formatDate,
+    numberToDatetime,
+    parseDate,
+    parseDateSkeleton,
+    parseDefaultDate
+} from './afb-formatters.min.js';
 
-function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+function __decorate ( decorators, target, key, desc ) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor ( target, key ) : desc, d;
+    if ( typeof Reflect === "object" && typeof Reflect.decorate === "function" ) r = Reflect.decorate ( decorators, target, key, desc );
+    else for ( var i = decorators.length - 1; i >= 0; i-- ) if ( d = decorators[ i ] ) r = ( c < 3 ? d ( r ) : c > 3 ? d ( target, key, r ) : d ( target, key ) ) || r;
+    return c > 3 && r && Object.defineProperty ( target, key, r ), r;
 }
 
-const ConstraintType = Object.freeze({
+const ConstraintType = Object.freeze ( {
     PATTERN_MISMATCH: 'patternMismatch',
     TOO_SHORT: 'tooShort',
     TOO_LONG: 'tooLong',
