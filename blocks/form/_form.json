@@ -45,14 +45,18 @@
               "name": "actionType",
               "label": "Submit Action",
               "options": [
-                  {
-                      "name": "Submit to REST endpoint",
-                      "value": "fd/af/components/guidesubmittype/restendpoint"
-                  },
-                  {
-                      "name": "Send email",
-                      "value": "fd/af/components/guidesubmittype/email"
-                  }
+                {
+                  "name": "Submit to REST endpoint",
+                  "value": "fd/af/components/guidesubmittype/restendpoint"
+                },
+                {
+                  "name": "Send email",
+                  "value": "fd/af/components/guidesubmittype/email"
+                },
+                {
+                  "name": "Submit to Spreadsheet",
+                  "value": "fd/af/components/guidesubmittype/franklin/spreadsheet"
+                }
               ],
               "value" : ""
           },
@@ -114,31 +118,59 @@
                   {
                       "component": "boolean",
                       "name": "useExternalEmailTemplate",
-                      "label": "Use external template",
-                      "valueType": "boolean"
+                    "label": "Use external template",
+                    "valueType": "boolean"
                   },
-                  {
-                      "component": "aem-content",
-                      "name": "templatePath",
-                      "label": "External template path",
-                      "valueType": "string",
-                      "condition": { "==": [{ "var": "useExternalEmailTemplate" }, true] }
-                  },
-                  {
-                      "component": "richtext",
-                      "name": "template",
-                      "label": "Email template",
-                      "valueType": "string",
-                      "condition": { "!=": [{ "var": "useExternalEmailTemplate" }, true] }
-                  },
-                  {
-                      "component": "boolean",
-                      "name": "includeAttachments",
-                      "label": "Include attachments",
-                      "valueType": "boolean"
+                {
+                  "component": "aem-content",
+                  "name": "templatePath",
+                  "label": "External template path",
+                  "valueType": "string",
+                  "condition": {
+                    "==": [
+                      {
+                        "var": "useExternalEmailTemplate"
+                      },
+                      true
+                    ]
                   }
+                },
+                {
+                  "component": "richtext",
+                  "name": "template",
+                  "label": "Email template",
+                  "valueType": "string",
+                  "condition": {
+                    "!=": [
+                      {
+                        "var": "useExternalEmailTemplate"
+                      },
+                      true
+                    ]
+                  }
+                },
+                {
+                  "component": "boolean",
+                  "name": "includeAttachments",
+                  "label": "Include attachments",
+                  "valueType": "boolean"
+                }
               ]
+          },
+        {
+          "component": "text",
+          "name": "spreadsheetUrl",
+          "label": "Spreadsheet Url",
+          "valueType": "string",
+          "condition": {
+            "==": [
+              {
+                "var": "actionType"
+              },
+              "fd/af/components/guidesubmittype/franklin/spreadsheet"
+            ]
           }
+        }
       ]
     }
   ],
