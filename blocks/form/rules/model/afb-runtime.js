@@ -2674,8 +2674,8 @@ const convertQueryString = (endpoint, payload) => {
     return endpoint.includes('?') ? `${endpoint}&${params.join('&')}` : `${endpoint}?${params.join('&')}`;
 };
 
-const MT_SUPPORTED_SUBMIT_TYPES_PREFIX = ['franklin'];
-const SUBMISSION_SERVICE_DOMAIN = 'https://forms.adobe.com';
+const MT_SUPPORTED_SUBMIT_TYPES_PREFIX = [ 'franklin' ];
+const SUBMISSION_SERVICE_DOMAIN = 'http://localhost:4000';
 const UE_RESOURCE_TYPE = 'fd/franklin/components/form/v1/form';
 
 const getCustomEventName = (name) => {
