@@ -20,7 +20,8 @@
                             ],
                             "visible": true,
                             "enabled": true,
-                            "orientation": "horizontal"
+                            "orientation": "horizontal",
+                            "type": "number[]"
                         }
                     }
                 }
@@ -42,21 +43,38 @@
                         },
                         {
                             "component": "select",
+                            "name": "variant",
+                            "label": "Variant",
+                            "options": [
+                                {
+                                    "name": "Default",
+                                    "value": "default"
+                                },
+                                {
+                                    "name": "Cards",
+                                    "value": "cards"
+                                }
+                            ],
+                            "value": "default"
+                        },
+                        {
+                            "component": "select",
                             "label": "Data type of submitted value",
                             "name": "type",
                             "valueType": "string",
+                            "value": "number[]",
                             "options": [
                                 {
                                     "name": "String",
-                                    "value": "string"
+                                    "value": "string[]"
                                 },
                                 {
                                     "name": "Boolean",
-                                    "value": "boolean"
+                                    "value": "boolean[]"
                                 },
                                 {
                                     "name": "Number",
-                                    "value": "number"
+                                    "value": "number[]"
                                 }
                             ]
                         },

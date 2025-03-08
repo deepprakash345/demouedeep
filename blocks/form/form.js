@@ -15,7 +15,9 @@ import componentDecorator from './mappings.js';
 import DocBasedFormToAF from './transform.js';
 import transferRepeatableDOM, { insertAddButton, insertRemoveButton } from './components/repeat/repeat.js';
 import { handleSubmit } from './submit.js';
-import { emailPattern, getRouting, getSubmitBaseUrl } from './constant.js';
+
+import { getSubmitBaseUrl, getRouting,  emailPattern } from './constant.js';
+import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export const DELAY_MS = 0;
 let captchaField;
@@ -202,7 +204,12 @@ function createRadioOrCheckboxGroup(fd) {
       enum: [value],
       required: fd.required,
     });
-    const layout = fd.properties['afs:layout'];
+    const { variant, 'afs:layout': layout } = fd.properties;
+    if (variant === 'cards') {
+      wrapper.classList.add(variant);
+    } else {
+      wrapper.classList.remove('cards');
+    }
     if (layout?.orientation === 'horizontal') {
       wrapper.classList.add('horizontal');
     }
@@ -246,14 +253,10 @@ function createPlainText(fd) {
 
 function createImage(fd) {
   const field = createFieldWrapper(fd);
-  const imagePath = fd.source || fd.properties['fd:repoPath'] || '';
-  const image = `
-  <picture>
-    <source srcset="${imagePath}?width=2000&optimize=medium" media="(min-width: 600px)">
-    <source srcset="${imagePath}?width=750&optimize=medium">
-    <img alt="${fd.altText || fd.name}" src="${imagePath}?width=750&optimize=medium">
-  </picture>`;
-  field.innerHTML = image;
+  field.id = fd?.id;
+  const imagePath = fd.value || fd.properties['fd:repoPath'] || '';
+  const altText = fd.altText || fd.name;
+  field.append(createOptimizedPicture(imagePath, altText));
   return field;
 }
 
@@ -571,6 +574,7 @@ export default async function decorate(block) {
       formDef = transform.transform(formDef);
       source = 'sheet';
       form = await createForm(formDef);
+      form.dataset.submitHeaders = JSON.stringify(formDef.submitHeaders);
       const docRuleEngine = await import('./rules-doc/index.js');
       docRuleEngine.default(formDef, form);
       rules = false;
@@ -585,7 +589,6 @@ export default async function decorate(block) {
     form.dataset.redirectUrl = formDef.redirectUrl || '';
     form.dataset.thankYouMsg = formDef.thankYouMsg || '';
     form.dataset.action = formDef.action || pathname?.split('.json')[0];
-    form.dataset.submitHeaders = JSON.stringify(formDef.submitHeaders);
     form.dataset.source = source;
     form.dataset.rules = rules;
     form.dataset.id = formDef.id;
